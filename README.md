@@ -38,3 +38,6 @@ $ docker exec -it <container_id> mongo -u john -p 123456
 ```bash
 [{$match: {source: {$eq: 'stderr'}}}]
 ```
+
+## TODO
+- [ ] write plugin to flatten the nested json structure to something like a.b.c=val, to allow metabase to perform better data x-ray
