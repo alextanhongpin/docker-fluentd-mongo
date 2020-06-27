@@ -1,0 +1,47 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:4.2
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: john
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: fluentd
+    networks:
+      - fluent
+    ports:
+      - 127.0.0.1:27017:27017
+
+  server:
+    image: alextanhongpin/go-fluent
+    depends_on:
+      - fluentd
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        tag: mongo
+    networks:
+      - fluent
+    ports:
+      - 127.0.0.1:8080:8080
+
+  fluentd:
+    image: alextanhongpin/fluentd-mongo
+    volumes:
+      - ./conf/fluent.conf:/fluentd/etc/fluent.conf
+    networks:
+      - fluent
+    ports:
+      - 127.0.0.1:24224:24224
+      - 127.0.0.1:24224:24224/udp
+
+  metabase:
+    image: metabase/metabase:v0.35.4
+    networks:
+      - fluent
+    ports:
+      - 127.0.0.1:3000:3000
+
+networks:
+  fluent:
+    driver: bridge
