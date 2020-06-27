@@ -13,3 +13,6 @@ up:
 
 down:
 	@docker-compose down
+
+curl:
+	for i in {1..10}; do curl localhost:8080; done

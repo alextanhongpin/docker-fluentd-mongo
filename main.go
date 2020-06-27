@@ -14,7 +14,10 @@ func main() {
 	defer logger.Sync()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		logger.Info("hello world", zap.Time("now", time.Now()))
+		logger.Info("hello world",
+			zap.Time("now", time.Now()),
+			zap.String("params", "custom params"),
+		)
 		fmt.Fprintf(w, "hello world")
 	})
 	log.Println("listening on port *:8080. press ctrl + c to cancel")
